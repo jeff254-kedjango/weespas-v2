@@ -1,0 +1,194 @@
+/* ==========================================================================
+   SEARCH PANEL — Aside filter panel (Sale/Rent toggle, location, filters)
+   ========================================================================== */
+
+.search-panel {
+  background: var(--color-bg);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(2, 44, 34, 0.08);
+  padding: var(--space-6);
+}
+
+.search-panel__header {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius-lg);
+  display: inline-flex;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-family: var(--font-heading);
+  font-weight: var(--weight-bold);
+  font-size: var(--text-xs);
+  margin-bottom: var(--space-6);
+}
+
+.search-panel__body {
+  display: grid;
+  gap: var(--space-4);
+}
+
+/* ── Sale / Rent Toggle ── */
+.search-panel__toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.toggle-pill {
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(2, 44, 34, 0.12);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-weight: var(--weight-bold);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.toggle-pill:hover {
+  border-color: var(--color-primary-light);
+}
+
+.toggle-pill.active {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  border-color: var(--color-primary);
+}
+
+/* ── Field Groups ── */
+.field-group {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.field-group label {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  color: var(--color-text);
+  font-family: var(--font-heading);
+}
+
+.field-group input,
+.field-group select {
+  width: 100%;
+  min-height: 48px;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(2, 44, 34, 0.16);
+  padding: 0 var(--space-4);
+  color: var(--color-text);
+  background: var(--color-bg-white);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  transition: border-color var(--duration-fast) var(--ease-out),
+              box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.field-group input:focus,
+.field-group select:focus {
+  outline: none;
+  border-color: var(--color-primary-light);
+  box-shadow: 0 0 0 3px var(--color-accent-muted);
+}
+
+.field-group input::placeholder {
+  color: var(--color-text-tertiary);
+}
+
+/* ── Location Row ── */
+.location-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+/* ── Form Grid (2-col for beds/baths/price) ── */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+/* ── Buttons ── */
+.location-button {
+  width: 100%;
+  border-radius: var(--radius-lg);
+  min-height: 48px;
+  font-family: var(--font-body);
+  font-weight: var(--weight-bold);
+  font-size: var(--text-sm);
+  border: 1px solid rgba(2, 44, 34, 0.16);
+  background: var(--color-primary-light);
+  color: var(--color-text-inverse);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.location-button:hover {
+  background: var(--color-primary);
+  transform: translateY(-1px);
+}
+
+.location-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-accent-muted);
+}
+
+.primary-button {
+  width: 100%;
+  border-radius: var(--radius-lg);
+  min-height: 52px;
+  font-family: var(--font-heading);
+  font-weight: var(--weight-bold);
+  font-size: var(--text-base);
+  border: none;
+  background: var(--color-accent);
+  color: var(--color-text-on-accent);
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(191, 255, 0, 0.25);
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.primary-button:hover {
+  background: var(--color-accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 12px 32px rgba(191, 255, 0, 0.35);
+}
+
+.primary-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(191, 255, 0, 0.4);
+}
+
+.link-button {
+  background: transparent;
+  color: var(--color-primary-light);
+  text-decoration: underline;
+  border: none;
+  padding: 0;
+  justify-self: start;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+  transition: color var(--duration-fast);
+}
+
+.link-button:hover {
+  color: var(--color-primary);
+}
+
+/* ── Responsive ── */
+@media (max-width: 720px) {
+  .search-panel {
+    border-radius: var(--radius-lg);
+  }
+
+  .form-grid,
+  .location-row {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,227 @@
+/* ==========================================================================
+   PROPERTY GALLERY — Featured hero card with thumbnail carousel below
+   ========================================================================== */
+
+.gallery-card {
+  background: var(--color-bg);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(2, 44, 34, 0.08);
+  display: grid;
+  overflow: hidden;
+}
+
+/* ── Featured Hero Image ── */
+.gallery-hero {
+  position: relative;
+  min-height: 350px;
+  padding: var(--space-8);
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--color-primary-light), var(--color-primary));
+}
+
+.gallery-hero__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(2, 44, 34, 0.2) 0%,
+    rgba(2, 44, 34, 0.75) 100%
+  );
+}
+
+.gallery-hero__content {
+  position: relative;
+  z-index: 1;
+  color: var(--color-text-inverse);
+  max-width: 620px;
+}
+
+.gallery-hero__content .eyebrow {
+  display: inline-flex;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  margin-bottom: var(--space-3);
+}
+
+.gallery-hero__content h2 {
+  margin: 0 0 var(--space-3);
+  font-size: clamp(var(--text-2xl), 2.6vw, var(--text-4xl));
+  color: var(--color-text-inverse);
+  line-height: var(--leading-tight);
+}
+
+.gallery-hero__content .subtext {
+  margin: 0 0 var(--space-2);
+  color: var(--color-accent);
+  font-weight: var(--weight-semibold);
+  font-size: var(--text-sm);
+}
+
+.gallery-hero__content .hero-copy {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.82);
+  line-height: var(--leading-relaxed);
+  font-size: var(--text-sm);
+}
+
+/* ── Carousel Shell ── */
+.carousel-shell {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-6) var(--space-5) var(--space-8);
+}
+
+.carousel-btn {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(2, 44, 34, 0.16);
+  background: var(--color-bg-white);
+  color: var(--color-text);
+  font-size: 1.5rem;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.carousel-btn:hover:not(:disabled) {
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  transform: scale(1.05);
+}
+
+.carousel-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* ── Carousel Track ── */
+.carousel-track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(210px, 1fr);
+  gap: var(--space-4);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  padding-bottom: var(--space-2);
+}
+
+.carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Carousel Item (Thumbnail Card) ── */
+.carousel-item {
+  min-width: 210px;
+  background: var(--color-bg-white);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(2, 44, 34, 0.1);
+  padding: var(--space-4);
+  text-align: left;
+  scroll-snap-align: center;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+}
+
+.carousel-item:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.carousel-item.active {
+  border-color: var(--color-accent);
+  box-shadow: 0 8px 24px rgba(191, 255, 0, 0.15);
+}
+
+/* ── Thumbnail Visual ── */
+.thumbnail-visual {
+  width: 100%;
+  height: 120px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+  display: grid;
+  place-items: center;
+  margin-bottom: var(--space-4);
+  color: var(--color-text-inverse);
+  font-size: 2rem;
+  font-weight: var(--weight-bold);
+}
+
+.thumbnail-copy {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.thumbnail-copy strong {
+  font-size: var(--text-base);
+  display: block;
+  color: var(--color-text);
+}
+
+.thumbnail-copy span {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+}
+
+/* ── Skeleton Loading State ── */
+.gallery-skeleton {
+  animation: fadeIn var(--duration-normal) var(--ease-out);
+}
+
+.hero-skeleton {
+  min-height: 350px;
+  background: linear-gradient(135deg, rgba(2, 44, 34, 0.08), rgba(2, 44, 34, 0.15));
+  animation: shimmer 1.5s infinite;
+  background-size: 400% 100%;
+}
+
+.carousel-skeleton {
+  display: flex;
+  gap: var(--space-4);
+  padding: var(--space-6) var(--space-5);
+}
+
+.thumbnail-skeleton {
+  width: 210px;
+  min-width: 210px;
+  height: 180px;
+  border-radius: var(--radius-lg);
+  background: rgba(2, 44, 34, 0.06);
+  animation: shimmer 1.5s infinite;
+  background-size: 400% 100%;
+}
+
+/* ── Responsive ── */
+@media (max-width: 720px) {
+  .gallery-card {
+    border-radius: var(--radius-lg);
+  }
+
+  .carousel-shell {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .carousel-btn {
+    align-self: center;
+  }
+}

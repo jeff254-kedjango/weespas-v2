@@ -1,0 +1,129 @@
+/* ==========================================================================
+   DESIGN TOKENS — Weespas Brand System
+   All CSS custom properties live here. Every component references these
+   instead of hard-coded values, enabling theme changes from one file.
+   ========================================================================== */
+
+:root {
+  /* ── Brand Colors ── */
+  --color-primary: #022C22;          /* Midnight Emerald — nav, headings, footers */
+  --color-primary-light: #064E3B;    /* Lighter emerald for hover states */
+  --color-primary-dark: #011A14;     /* Darker emerald for active states */
+
+  --color-accent: #BFFF00;           /* Electric Lime — CTAs, active indicators */
+  --color-accent-hover: #A8E600;     /* Lime hover state */
+  --color-accent-muted: rgba(191, 255, 0, 0.15); /* Lime tint for backgrounds */
+
+  --color-bg: #F5F5F4;              /* Soft Sand — page background */
+  --color-bg-white: #FFFFFF;         /* Card backgrounds */
+  --color-bg-dark: #1A1A1A;          /* Dark sections (footer) */
+
+  /* ── Text Colors ── */
+  --color-text: #1A1A1A;             /* Primary body text */
+  --color-text-secondary: #6B7280;   /* Muted/secondary text */
+  --color-text-tertiary: #9CA3AF;    /* Captions, timestamps */
+  --color-text-inverse: #FFFFFF;     /* Text on dark backgrounds */
+  --color-text-on-accent: #022C22;   /* Text on Electric Lime */
+
+  /* ── Semantic Colors ── */
+  --color-success: #10B981;          /* Verified badges, success states */
+  --color-error: #EF4444;            /* Error states, favorite hearts */
+  --color-warning: #F59E0B;          /* Warnings */
+  --color-info: #3B82F6;             /* Info badges */
+  --color-heart: #EF4444;            /* Favorite heart color */
+  --color-heart-bg: rgba(239, 68, 68, 0.1);
+
+  /* ── Listing Type Colors ── */
+  --color-sale: #022C22;             /* "FOR SALE" badge */
+  --color-sale-bg: rgba(191, 255, 0, 0.9);
+  --color-rent: #1E40AF;             /* "FOR RENT" badge */
+  --color-rent-bg: rgba(59, 130, 246, 0.9);
+
+  /* ── Typography ── */
+  --font-heading: 'Plus Jakarta Sans', 'Nunito', system-ui, sans-serif;
+  --font-body: 'Nunito', 'Plus Jakarta Sans', system-ui, sans-serif;
+
+  --text-xs: 0.75rem;     /* 12px */
+  --text-sm: 0.875rem;    /* 14px */
+  --text-base: 1rem;      /* 16px */
+  --text-lg: 1.125rem;    /* 18px */
+  --text-xl: 1.25rem;     /* 20px */
+  --text-2xl: 1.5rem;     /* 24px */
+  --text-3xl: 1.875rem;   /* 30px */
+  --text-4xl: 2.25rem;    /* 36px */
+  --text-5xl: 3rem;       /* 48px */
+
+  --leading-tight: 1.2;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.65;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* ── Spacing Scale (4px base) ── */
+  --space-1: 0.25rem;     /* 4px */
+  --space-2: 0.5rem;      /* 8px */
+  --space-3: 0.75rem;     /* 12px */
+  --space-4: 1rem;        /* 16px */
+  --space-5: 1.25rem;     /* 20px */
+  --space-6: 1.5rem;      /* 24px */
+  --space-8: 2rem;        /* 32px */
+  --space-10: 2.5rem;     /* 40px */
+  --space-12: 3rem;       /* 48px */
+  --space-16: 4rem;       /* 64px */
+  --space-20: 5rem;       /* 80px */
+
+  /* ── Border Radius ── */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* ── Shadows ── */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.16);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.06), 0 0 1px rgba(0, 0, 0, 0.08);
+  --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.12), 0 0 1px rgba(0, 0, 0, 0.1);
+
+  /* ── Glassmorphism ── */
+  --glass-bg: rgba(255, 255, 255, 0.15);
+  --glass-bg-dark: rgba(0, 0, 0, 0.4);
+  --glass-blur: blur(12px);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.2);
+
+  /* ── Transitions ── */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 400ms;
+
+  /* ── Z-Index Layers ── */
+  --z-base: 0;
+  --z-card: 1;
+  --z-sticky: 100;
+  --z-navbar: 200;
+  --z-dropdown: 300;
+  --z-overlay: 400;
+  --z-modal: 500;
+  --z-toast: 600;
+  --z-bottom-nav: 150;
+
+  /* ── Layout ── */
+  --container-max: 1280px;
+  --container-padding: var(--space-4);
+  --navbar-height: 64px;
+  --bottom-nav-height: 64px;
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+
+  /* ── Breakpoints (for reference — use in @media queries) ── */
+  /* --bp-mobile: 480px   */
+  /* --bp-tablet: 768px   */
+  /* --bp-laptop: 1024px  */
+  /* --bp-desktop: 1280px */
+}
