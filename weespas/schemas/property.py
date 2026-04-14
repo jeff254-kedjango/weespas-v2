@@ -213,6 +213,8 @@ class PropertyListResponse(BaseModel):
     view_count: int
     created_at: datetime
     distance: Optional[float] = None
+    bedrooms: Optional[int] = None
+    bathrooms: Optional[int] = None
 
     class Config:
         from_attributes = True
@@ -228,36 +230,53 @@ class PaginatedPropertyResponse(BaseModel):
 
 # ===================== FILTERING =====================
 class PropertyFilterParams(BaseModel):
-    """Advanced filtering parameters"""
+    """Advanced filtering parameters — all fields are optional for hyper-refined search"""
     skip: int = Field(0, ge=0)
     limit: int = Field(20, ge=1, le=100)
-    
-    # Location filtering
+
+    # Location filtering (geo-radius)
     latitude: Optional[float] = None
     longitude: Optional[float] = None
     radius: Optional[float] = Field(None, gt=0)  # km
-    
+
+    # Location filtering (text-based)
+    city: Optional[str] = None
+    county: Optional[str] = None
+    location_name: Optional[str] = None
+
     # Price filtering
     min_price: Optional[float] = Field(None, ge=0)
     max_price: Optional[float] = Field(None, ge=0)
-    
+
     # Category & listing type
     category: Optional[PropertyCategory] = None
     listing_type: Optional[PropertyListingType] = None
-    
+
     # Attributes
     engineer_certified: Optional[bool] = None
     bedrooms: Optional[int] = None
-    
+    bathrooms: Optional[int] = None
+    min_size: Optional[float] = Field(None, ge=0)
+    max_size: Optional[float] = Field(None, ge=0)
+    parking_spaces: Optional[int] = Field(None, ge=0)
+    is_featured: Optional[bool] = None
+
     # Sorting
     sort_by: str = "created_at"  # created_at, price, distance
     sort_order: str = "desc"  # asc, desc
-    
+
     @validator('max_price')
     def validate_price_range(cls, v, values):
         if v is not None and 'min_price' in values and values['min_price'] is not None:
             if v < values['min_price']:
                 raise ValueError('max_price must be greater than min_price')
+        return v
+
+    @validator('max_size')
+    def validate_size_range(cls, v, values):
+        if v is not None and 'min_size' in values and values['min_size'] is not None:
+            if v < values['min_size']:
+                raise ValueError('max_size must be greater than min_size')
         return v
 
 

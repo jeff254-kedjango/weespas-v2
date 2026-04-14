@@ -176,85 +176,133 @@ class PropertyService:
         filters: PropertyFilterParams
     ) -> PaginatedPropertyResponse:
         """
-        Advanced filtering with support for:
-        - Location-based (geo-radius)
-        - Price range
-        - Category
-        - Listing type
-        - Engineer certified
-        - Bedrooms
-        
-        Performance: Composite indexes on (listing_type, price), (category, is_active), etc.
+        All filters optional. No filters = return all active properties.
+        Any combination of filters = AND logic for hyper-refined search.
         """
         query = db.query(Property).filter(Property.is_active == True)
-        query = query.join(Address, Property.id == Address.property_id)
-        
-        # Apply filters
-        if filters.listing_type:
-            model_lt = ModelListingType(filters.listing_type.value if hasattr(filters.listing_type, 'value') else filters.listing_type)
-            query = query.filter(Property.listing_type == model_lt)
-        
-        if filters.category:
-            cat = db.query(PropertyCategory).filter(PropertyCategory.slug == filters.category.value).first()
+
+        # Only join Address when a location filter is actually provided
+        has_location_filter = (
+            filters.city is not None
+            or filters.county is not None
+            or filters.location_name is not None
+            or (filters.latitude is not None and filters.longitude is not None and filters.radius is not None)
+        )
+
+        if has_location_filter:
+            query = query.join(Address, Property.id == Address.property_id)
+
+        # Build filters list — only add conditions for non-None values
+        conditions = []
+
+        # Listing type
+        if filters.listing_type is not None:
+            try:
+                model_lt = ModelListingType(filters.listing_type.value)
+                conditions.append(Property.listing_type == model_lt)
+            except (ValueError, KeyError):
+                pass
+
+        # Category — lookup by slug, skip filter if category not found in DB
+        if filters.category is not None:
+            cat = db.query(PropertyCategory).filter(
+                PropertyCategory.slug == filters.category.value
+            ).first()
             if cat:
-                query = query.filter(Property.category_id == cat.id)
-        
+                conditions.append(Property.category_id == cat.id)
+
+        # Price range
         if filters.min_price is not None:
-            query = query.filter(Property.price >= filters.min_price)
-        
+            conditions.append(Property.price >= filters.min_price)
+
         if filters.max_price is not None:
-            query = query.filter(Property.price <= filters.max_price)
-        
+            conditions.append(Property.price <= filters.max_price)
+
+        # Engineer certified
         if filters.engineer_certified is not None:
-            query = query.filter(Property.is_engineer_certified == filters.engineer_certified)
-        
+            conditions.append(Property.is_engineer_certified == filters.engineer_certified)
+
+        # Featured
+        if filters.is_featured is not None:
+            conditions.append(Property.is_featured == filters.is_featured)
+
+        # Bedrooms (minimum)
         if filters.bedrooms is not None:
-            query = query.filter(Property.bedrooms >= filters.bedrooms)
-        
-        # Geo-spatial filtering
-        if filters.latitude is not None and filters.longitude is not None and filters.radius is not None:
+            conditions.append(Property.bedrooms >= filters.bedrooms)
+
+        # Bathrooms (minimum)
+        if filters.bathrooms is not None:
+            conditions.append(Property.bathrooms >= filters.bathrooms)
+
+        # Size range
+        if filters.min_size is not None:
+            conditions.append(Property.size_numeric >= filters.min_size)
+
+        if filters.max_size is not None:
+            conditions.append(Property.size_numeric <= filters.max_size)
+
+        # Parking spaces (minimum)
+        if filters.parking_spaces is not None:
+            conditions.append(Property.parking_spaces >= filters.parking_spaces)
+
+        # Text-based location (case-insensitive partial match)
+        if filters.city is not None:
+            conditions.append(Address.city.ilike(f"%{filters.city}%"))
+
+        if filters.county is not None:
+            conditions.append(Address.county.ilike(f"%{filters.county}%"))
+
+        if filters.location_name is not None:
+            conditions.append(Address.location_name.ilike(f"%{filters.location_name}%"))
+
+        # Apply ALL collected conditions at once
+        if conditions:
+            query = query.filter(and_(*conditions))
+
+        # Geo-spatial filtering (must happen after all SQL filters)
+        use_geo = (
+            filters.latitude is not None
+            and filters.longitude is not None
+            and filters.radius is not None
+        )
+
+        if use_geo:
+            all_props = query.all()
             properties_in_radius = []
-            for prop in query.all():
-                distance = PropertyService.haversine_distance(
+            for prop in all_props:
+                if not prop.address:
+                    continue
+                dist = PropertyService.haversine_distance(
                     filters.latitude, filters.longitude,
                     prop.address.latitude, prop.address.longitude
                 )
-                if distance <= filters.radius:
-                    properties_in_radius.append((prop, distance))
-            
+                if dist <= filters.radius:
+                    properties_in_radius.append((prop, dist))
+
             total = len(properties_in_radius)
-            
-            # Sorting
+
             if filters.sort_by == "distance":
                 properties_in_radius.sort(key=lambda x: x[1], reverse=(filters.sort_order == "desc"))
             elif filters.sort_by == "price":
-                properties_in_radius.sort(
-                    key=lambda x: float(x[0].price),
-                    reverse=(filters.sort_order == "desc")
-                )
-            else:  # created_at
-                properties_in_radius.sort(
-                    key=lambda x: x[0].created_at,
-                    reverse=(filters.sort_order == "desc")
-                )
-            
+                properties_in_radius.sort(key=lambda x: float(x[0].price), reverse=(filters.sort_order == "desc"))
+            else:
+                properties_in_radius.sort(key=lambda x: x[0].created_at, reverse=(filters.sort_order == "desc"))
+
             paginated = properties_in_radius[filters.skip:filters.skip + filters.limit]
-            items = [PropertyService._format_list_response(prop, distance) for prop, distance in paginated]
+            items = [PropertyService._format_list_response(prop, dist) for prop, dist in paginated]
         else:
-            # No geo-filtering, apply standard sorting
+            # Standard sorting (no geo)
             if filters.sort_by == "price":
                 sort_col = desc(Property.price) if filters.sort_order == "desc" else asc(Property.price)
             elif filters.sort_by == "distance":
-                # Can't sort by distance without coordinates
                 sort_col = desc(Property.created_at)
-            else:  # created_at
+            else:
                 sort_col = desc(Property.created_at) if filters.sort_order == "desc" else asc(Property.created_at)
-            
+
             total = query.count()
-            
             properties = query.order_by(sort_col).offset(filters.skip).limit(filters.limit).all()
             items = [PropertyService._format_list_response(prop) for prop in properties]
-        
+
         return PaginatedPropertyResponse(
             total=total,
             skip=filters.skip,
@@ -490,5 +538,7 @@ class PropertyService:
             is_featured=property_obj.is_featured,
             view_count=property_obj.view_count,
             created_at=property_obj.created_at,
-            distance=distance
+            distance=distance,
+            bedrooms=property_obj.bedrooms,
+            bathrooms=property_obj.bathrooms
         )

@@ -43,6 +43,10 @@ def seed_database():
             ("Warehouse", "warehouse", "Storage or industrial space"),
             ("Shop", "shop", "Retail shop space"),
             ("Kiosk", "kiosk", "Small retail kiosk"),
+            ("Container", "container", "Converted shipping container unit"),
+            ("Stall", "stall", "Market or roadside stall"),
+            ("Commercial Space", "commercial_space", "General commercial premises"),
+            ("Other", "other", "Uncategorized property type"),
         ]
         
         categories = {}

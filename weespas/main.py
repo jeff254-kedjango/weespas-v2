@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from core.database import create_tables
 from routers.properties import router as properties_router
+from routers.auth import router as auth_router
+from routers.contact import router as contact_router
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -34,6 +36,8 @@ async def startup_event():
 
 # ===================== API ROUTES =====================
 app.include_router(properties_router, prefix="/api/v1", tags=["properties"])
+app.include_router(auth_router, prefix="/api/v1", tags=["auth"])
+app.include_router(contact_router, prefix="/api/v1", tags=["contact"])
 
 
 # ===================== HEALTH CHECK =====================

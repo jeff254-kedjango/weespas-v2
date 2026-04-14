@@ -4,7 +4,8 @@ from core.database import get_db
 from services.property_service import PropertyService
 from schemas.property import (
     PropertyCreateRequest, PropertyResponse, PropertyListResponse,
-    PaginatedPropertyResponse, PropertyFilterParams, PropertyUpdateRequest
+    PaginatedPropertyResponse, PropertyFilterParams, PropertyUpdateRequest,
+    PropertyCategory
 )
 
 router = APIRouter()
@@ -80,6 +81,17 @@ def get_nearby_properties(
 
 
 @router.get(
+    "/properties/categories",
+    response_model=list[str],
+    summary="List all property categories",
+    tags=["Properties"]
+)
+def list_categories():
+    """Return all available property category values."""
+    return [c.value for c in PropertyCategory]
+
+
+@router.get(
     "/properties/featured",
     response_model=list[PropertyListResponse],
     summary="Get featured properties",
@@ -104,20 +116,21 @@ def get_featured_properties(
     tags=["Search"]
 )
 def filter_properties(
-    filters: PropertyFilterParams = Body(...),
+    filters: PropertyFilterParams = Body(default={}),
     db: Session = Depends(get_db)
 ):
     """
-    Advanced filtering with multiple criteria:
+    Hyper-refined filtering — send any combination of filters or an empty body to get all.
 
-    - **Location-based**: latitude, longitude, radius (in km)
+    - **Location (geo)**: latitude, longitude, radius (in km)
+    - **Location (text)**: city, county, location_name (partial match)
     - **Price**: min_price, max_price
-    - **Category**: specific property type
+    - **Category**: house, apartment, villa, studio, office, land, etc.
     - **Listing type**: rent or sale
-    - **Attributes**: engineer_certified, bedrooms
-    - **Sorting**: by created_at, price, or distance
+    - **Attributes**: bedrooms, bathrooms, min_size, max_size, parking_spaces, engineer_certified, is_featured
+    - **Sorting**: sort_by (created_at, price, distance), sort_order (asc, desc)
 
-    **Performance**: Uses composite indexes for optimal query performance.
+    All filters are optional. Combine with AND logic for hyper-refined search.
     """
     return PropertyService.filter_properties(db, filters)
 
