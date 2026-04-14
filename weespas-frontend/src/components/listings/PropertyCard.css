@@ -86,6 +86,27 @@
   overflow: hidden;
 }
 
+/* ── Specs (beds/baths) ── */
+.property-card__specs {
+  display: flex;
+  gap: var(--space-4);
+  align-items: center;
+}
+
+.spec-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-secondary);
+}
+
+.spec-item svg {
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
 /* ── Footer ── */
 .property-card__footer {
   display: flex;
@@ -100,4 +121,18 @@
   color: var(--color-primary);
   font-family: var(--font-heading);
   font-weight: var(--weight-bold);
+}
+
+/* ── Certified Badge ── */
+.badge--certified {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  color: #065f46;
+  background: #d1fae5;
+  white-space: nowrap;
 }

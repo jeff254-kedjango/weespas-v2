@@ -71,3 +71,10 @@
   line-height: var(--leading-relaxed);
   font-size: var(--text-sm);
 }
+
+/* ── Responsive ── */
+@media (max-width: 720px) {
+  .property-grid {
+    gap: var(--space-4);
+  }
+}

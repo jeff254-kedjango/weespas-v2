@@ -14,6 +14,7 @@ import ListingTypeBadge from '../ui/ListingTypeBadge';
 import VerifiedBadge from '../ui/VerifiedBadge';
 import VibeTag from '../ui/VibeTag';
 import Badge from '../ui/Badge';
+import ImageGallery from '../ui/ImageGallery';
 import './PropertyDetails.css';
 
 interface PropertyDetailsProps {
@@ -23,6 +24,7 @@ interface PropertyDetailsProps {
 
 const PropertyDetails: React.FC<PropertyDetailsProps> = ({ property, onClose }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
   const { isFavorite, toggleFavorite } = useFavorites();
 
   // Gather all images — main image first, then extras
@@ -118,10 +120,17 @@ const PropertyDetails: React.FC<PropertyDetailsProps> = ({ property, onClose }) 
               </div>
             )}
 
-            {/* Track */}
+            {/* Track — click opens fullscreen lightbox */}
             <div className="pd-carousel__track" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
               {allImages.map((img) => (
-                <div key={img.id} className="pd-carousel__slide">
+                <div
+                  key={img.id}
+                  className="pd-carousel__slide"
+                  onClick={() => setLightboxOpen(true)}
+                  role="button"
+                  tabIndex={0}
+                  aria-label="Open fullscreen gallery"
+                >
                   <img src={img.url || img.thumbnail_url} alt={img.alt_text ?? property.title} loading="lazy" />
                 </div>
               ))}
@@ -151,6 +160,15 @@ const PropertyDetails: React.FC<PropertyDetailsProps> = ({ property, onClose }) 
             {imageCount > 1 && (
               <span className="pd-carousel__counter">{currentSlide + 1} / {imageCount}</span>
             )}
+
+            {/* Expand hint */}
+            <button
+              className="pd-carousel__expand"
+              onClick={() => setLightboxOpen(true)}
+              aria-label="Open fullscreen gallery"
+            >
+              <Icon name="expand" size={16} />
+            </button>
           </div>
         ) : (
           /* No-image fallback */
@@ -275,6 +293,15 @@ const PropertyDetails: React.FC<PropertyDetailsProps> = ({ property, onClose }) 
           )}
         </div>
       </div>
+
+      {/* Fullscreen lightbox */}
+      {lightboxOpen && imageCount > 0 && (
+        <ImageGallery
+          images={allImages}
+          initialIndex={currentSlide}
+          onClose={() => setLightboxOpen(false)}
+        />
+      )}
     </>
   );
 };

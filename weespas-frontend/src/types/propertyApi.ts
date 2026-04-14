@@ -9,6 +9,8 @@ export type PropertyCategory =
   | 'warehouse'
   | 'shop'
   | 'kiosk'
+  | 'container'
+  | 'stall'
   | 'commercial_space'
   | 'other';
 

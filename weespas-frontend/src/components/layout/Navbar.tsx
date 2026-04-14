@@ -1,24 +1,27 @@
 /* ==========================================================================
    NAVBAR — Sticky top navigation
-   Transparent on hero, solid on scroll. Hides on mobile scroll-down.
+   Always solid white background. Hides on mobile scroll-down.
    Links to login/register routes. Hamburger opens mobile drawer.
    ========================================================================== */
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import Icon from '../ui/Icon';
 import './Navbar.css';
 
 const Navbar: React.FC = () => {
-  const [scrolled, setScrolled] = useState(false);
+  const { isAuthenticated, user, logout } = useAuth();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isHome = location.pathname === '/';
   const [hidden, setHidden] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
 
-  /* Scroll detection: solid bg after 60px, hide on scroll-down (mobile) */
+  /* Hide navbar on mobile scroll-down */
   const handleScroll = useCallback(() => {
     const currentY = window.scrollY;
-    setScrolled(currentY > 60);
 
     if (window.innerWidth < 768) {
       setHidden(currentY > lastScrollY && currentY > 120);
@@ -48,9 +51,28 @@ const Navbar: React.FC = () => {
     return () => { document.body.style.overflow = ''; };
   }, [drawerOpen]);
 
+  /* Smooth-scroll to an element by ID, navigating home first if needed */
+  const scrollToSection = useCallback((id: string) => {
+    const doScroll = () => {
+      const el = document.getElementById(id);
+      if (el) {
+        const offset = 20; // small breathing room above target
+        const top = el.getBoundingClientRect().top + window.scrollY - offset;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    };
+
+    if (isHome) {
+      doScroll();
+    } else {
+      navigate('/');
+      // Wait for the home page to render, then scroll
+      setTimeout(doScroll, 100);
+    }
+  }, [isHome, navigate]);
+
   const navClasses = [
     'navbar',
-    scrolled ? 'navbar--scrolled' : '',
     hidden ? 'navbar--hidden' : '',
   ].filter(Boolean).join(' ');
 
@@ -66,8 +88,23 @@ const Navbar: React.FC = () => {
           {/* Desktop nav links */}
           <div className="navbar__links">
             <Link to="/" className="navbar__link">Home</Link>
-            <Link to="/login" className="navbar__link">Login</Link>
-            <Link to="/register" className="navbar__link navbar__link--cta">Sign Up</Link>
+            {isAuthenticated ? (
+              <>
+                <Link to="/favorites" className="navbar__link">Favorites</Link>
+                <button type="button" className="navbar__link navbar__link--btn" onClick={() => scrollToSection('after-hero')}>Properties</button>
+                <button type="button" className="navbar__link navbar__link--btn" onClick={() => scrollToSection('contact-form')}>Contact Us</button>
+                <Link to="/profile" className="navbar__link navbar__link--cta">
+                  {user?.name?.split(' ')[0] || 'Profile'}
+                </Link>
+              </>
+            ) : (
+              <>
+                <Link to="/login" className="navbar__link">Login</Link>
+                <button type="button" className="navbar__link navbar__link--btn" onClick={() => scrollToSection('after-hero')}>Properties</button>
+                <button type="button" className="navbar__link navbar__link--btn" onClick={() => scrollToSection('contact-form')}>Contact Us</button>
+                <Link to="/register" className="navbar__link navbar__link--cta">Sign Up</Link>
+              </>
+            )}
           </div>
 
           {/* Mobile hamburger */}
@@ -108,14 +145,45 @@ const Navbar: React.FC = () => {
             <Icon name="search" size={20} />
             <span>Explore</span>
           </Link>
-          <Link to="/login" className="drawer__link" onClick={() => setDrawerOpen(false)}>
-            <Icon name="user" size={20} />
-            <span>Login</span>
-          </Link>
-          <Link to="/register" className="drawer__link" onClick={() => setDrawerOpen(false)}>
-            <Icon name="user" size={20} />
-            <span>Sign Up</span>
-          </Link>
+          {isAuthenticated ? (
+            <>
+              <Link to="/favorites" className="drawer__link" onClick={() => setDrawerOpen(false)}>
+                <Icon name="heart" size={20} />
+                <span>Favorites</span>
+              </Link>
+              <button type="button" className="drawer__link" onClick={() => { setDrawerOpen(false); scrollToSection('after-hero'); }}>
+                <Icon name="search" size={20} />
+                <span>Properties</span>
+              </button>
+              <button type="button" className="drawer__link" onClick={() => { setDrawerOpen(false); scrollToSection('contact-form'); }}>
+                <Icon name="mapPin" size={20} />
+                <span>Contact Us</span>
+              </button>
+              <Link to="/profile" className="drawer__link" onClick={() => setDrawerOpen(false)}>
+                <Icon name="user" size={20} />
+                <span>Profile</span>
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="drawer__link" onClick={() => setDrawerOpen(false)}>
+                <Icon name="user" size={20} />
+                <span>Login</span>
+              </Link>
+              <button type="button" className="drawer__link" onClick={() => { setDrawerOpen(false); scrollToSection('after-hero'); }}>
+                <Icon name="search" size={20} />
+                <span>Properties</span>
+              </button>
+              <button type="button" className="drawer__link" onClick={() => { setDrawerOpen(false); scrollToSection('contact-form'); }}>
+                <Icon name="mapPin" size={20} />
+                <span>Contact Us</span>
+              </button>
+              <Link to="/register" className="drawer__link" onClick={() => setDrawerOpen(false)}>
+                <Icon name="user" size={20} />
+                <span>Sign Up</span>
+              </Link>
+            </>
+          )}
         </nav>
 
         <div className="drawer__footer">

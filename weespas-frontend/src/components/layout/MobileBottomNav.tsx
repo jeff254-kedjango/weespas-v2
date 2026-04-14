@@ -6,27 +6,56 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Icon from '../ui/Icon';
+import type { ViewMode } from '../ui/ViewToggle';
 import './MobileBottomNav.css';
 
 interface MobileBottomNavProps {
   favoriteCount?: number;
+  viewMode?: ViewMode;
+  onMapToggle?: () => void;
 }
 
-const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ favoriteCount = 0 }) => {
+const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
+  favoriteCount = 0,
+  viewMode = 'list',
+  onMapToggle,
+}) => {
   const location = useLocation();
   const path = location.pathname;
 
   const tabs = [
     { to: '/', icon: 'search' as const, label: 'Search' },
-    { to: '/#map', icon: 'map' as const, label: 'Map' },
-    { to: '/#favorites', icon: 'heart' as const, label: 'Saved', count: favoriteCount },
-    { to: '/login', icon: 'user' as const, label: 'Profile' },
+    { to: '/#map', icon: 'map' as const, label: 'Map', isMapTab: true },
+    { to: '/favorites', icon: 'heart' as const, label: 'Saved', count: favoriteCount },
+    { to: '/profile', icon: 'user' as const, label: 'Profile' },
   ];
 
   return (
     <nav className="bottom-nav" aria-label="Mobile navigation">
       {tabs.map((tab) => {
-        const isActive = tab.to === '/' ? path === '/' : path.startsWith(tab.to);
+        const isMapTab = 'isMapTab' in tab && tab.isMapTab;
+        const isActive = isMapTab
+          ? viewMode === 'map'
+          : tab.to === '/'
+            ? path === '/' && viewMode !== 'map'
+            : path.startsWith(tab.to);
+
+        if (isMapTab) {
+          return (
+            <button
+              key={tab.label}
+              type="button"
+              className={`bottom-nav__tab ${isActive ? 'bottom-nav__tab--active' : ''}`}
+              onClick={onMapToggle}
+            >
+              <span className="bottom-nav__icon">
+                <Icon name={tab.icon} size={22} />
+              </span>
+              <span className="bottom-nav__label">{tab.label}</span>
+            </button>
+          );
+        }
+
         return (
           <Link
             key={tab.label}

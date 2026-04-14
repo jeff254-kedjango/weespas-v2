@@ -1,5 +1,5 @@
 import { fetchJson, API_BASE_URL } from './config';
-import { PaginatedResponse, Property, PropertyFilterParams } from '../types/propertyApi';
+import { PaginatedResponse, Property, PropertyCategory, PropertyFilterParams } from '../types/propertyApi';
 
 function buildSearchParams(params: Record<string, any>) {
   const query = new URLSearchParams();
@@ -88,6 +88,15 @@ export async function searchProperties(query: string, skip = 0, limit = 20): Pro
 export async function fetchFeaturedProperties(limit = 10): Promise<Property[]> {
   const queryString = buildSearchParams({ limit });
   return fetchJson<Property[]>(`${API_BASE_URL}/properties/featured?${queryString}`);
+}
+
+export async function fetchCategories(): Promise<PropertyCategory[]> {
+  try {
+    return await fetchJson<PropertyCategory[]>(`${API_BASE_URL}/properties/categories`);
+  } catch {
+    // Endpoint may not exist yet — return empty so the component uses its fallback
+    return [];
+  }
 }
 
 export async function fetchGeoProperties(params: PropertyFilterParams): Promise<PaginatedResponse<Property>> {

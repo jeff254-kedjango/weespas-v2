@@ -13,7 +13,7 @@
   margin: 0 auto;
   padding: 0 var(--space-6) var(--space-8);
   display: grid;
-  grid-template-columns: 1.7fr 0.95fr;
+  grid-template-columns: 2fr 1fr;
   gap: var(--space-8);
 }
 
@@ -99,6 +99,14 @@
 }
 
 @media (max-width: 720px) {
+  .landing-grid {
+    padding: 0 var(--space-3) var(--space-8);
+  }
+
+  .preview-section {
+    padding: 0 var(--space-3) var(--space-8);
+  }
+
   .preview-header {
     flex-direction: column;
     align-items: flex-start;

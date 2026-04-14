@@ -96,6 +96,14 @@
   --glass-blur: blur(12px);
   --glass-border: 1px solid rgba(255, 255, 255, 0.2);
 
+  /* ── Light Glassmorphism (for white backgrounds) ── */
+  --glass-bg-light: rgba(2, 44, 34, 0.03);
+  --glass-blur-light: blur(8px);
+  --glass-border-light: 1.5px solid rgba(2, 44, 34, 0.1);
+
+  /* ── Hero Shadow ── */
+  --shadow-hero: 0 4px 16px rgba(0, 0, 0, 0.06);
+
   /* ── Transitions ── */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
