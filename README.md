@@ -22,4 +22,4 @@ Below are the specific gadget views highlighting DETAILS, FILTERS and ADMIN STAT
 
 | STATS VIEW ( DESKTOP ) | Property Details(DESKTOP ) |
 | :---: | :---: |
-| <img src="screenshots/stats.webp" width="250" /> | <img src="screenshots/details.webp" width="250" /> |
+| <img src="screenshots/stats.webp" width="450" /> | <img src="screenshots/details.webp" width="450" /> |
