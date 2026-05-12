@@ -1,6 +1,6 @@
 # 🚀 Project Name: Weespas UI/UX Concept
 
-> **Role:** Lead UI/UX Designer | **Tools:** Figma, React, Tailwind CSS
+> **Role:** Lead UI/UX Designer | **Tools:** React, FastAPI 
 
 ---
 
