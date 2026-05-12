@@ -14,7 +14,7 @@
 ## 🔍 Feature Deep-Dive
 
 ### User Journey & Analytics
-Below are the specific gadget views highlighting details, filter and Admin Stats view.
+Below are the specific gadget views highlighting DETAILS, FILTERS and ADMIN STATS views.
 
 | Property Details (Mobile) | Search Filters (Tablet) |
 | :---: | :---: |
