@@ -1,6 +1,6 @@
 # 🚀 Project Name: Weespas UI/UX Concept
 
-> **Role:** Lead UI/UX Designer | **Tools:** React, FastAPI 
+> **Role:** Lead UI/UX Designer | **Tools:** React, Type-Script, FastAPI 
 
 ---
 
