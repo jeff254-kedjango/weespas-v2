@@ -14,7 +14,7 @@
 ## 🔍 Feature Deep-Dive
 
 ### User Journey & Analytics
-Below are the specific gadget views highlighting the property heatmap and user settings.
+Below are the specific gadget views highlighting details, filter and Admin Stats view.
 
 | Property Details (Mobile) | Search Filters (Tablet) |
 | :---: | :---: |
