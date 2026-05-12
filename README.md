@@ -7,7 +7,7 @@
 ## 📱 Responsive Design Overview
 | Desktop View (Main Dashboard) | Tablet View | Mobile View |
 | :---: | :---: | :---: |
-| <img src="screenshots/listings.WEBP" width="450" /> | <img src="screenshots/listings tablet.WEBP" width="250" /> | <img src="screenshots/mobile-detail.WEBP" width="150" /> |
+| <img src="screenshots/listings.webp" width="450" /> | <img src="screenshots/listings tablet.webp" width="250" /> | <img src="screenshots/mobile-listings.webp" width="150" /> |
 
 ---
 
@@ -18,8 +18,8 @@ Below are the specific gadget views highlighting the property heatmap and user s
 
 | Property Details (Mobile) | Search Filters (Tablet) |
 | :---: | :---: |
-| <img src="screenshots/mobile_details.png" width="200" /> | <img src="screenshots/tablet_filters.png" width="300" /> |
+| <img src="screenshots/mobile-detail.webp" width="200" /> | <img src="screenshots/tablet-filter.webp" width="300" /> |
 
-| Navigation Menu | Dark Mode Toggle |
+| STATS VIEW ( DESKTOP ) | Property Details(DESKTOP ) |
 | :---: | :---: |
-| <img src="screenshots/nav_view.png" width="250" /> | <img src="screenshots/dark_mode.png" width="250" /> |
+| <img src="screenshots/stats.webp" width="250" /> | <img src="screenshots/details.webp" width="250" /> |
